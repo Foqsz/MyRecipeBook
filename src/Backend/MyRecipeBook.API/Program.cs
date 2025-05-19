@@ -1,3 +1,8 @@
+using MyRecipeBook.API.Filters;
+using MyRecipeBook.API.Middleware;
+using MyRecipeBook.Application;
+using MyRecipeBook.Infrastucture;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddMvc(options => options.Filters.Add(typeof(ExceptionFilter)));
+
+builder.Services.AddAplication();
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 
@@ -14,6 +24,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<CultureMiddleware>();
 
 app.UseHttpsRedirection();
 
