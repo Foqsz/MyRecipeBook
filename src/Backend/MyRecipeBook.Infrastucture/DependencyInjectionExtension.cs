@@ -5,6 +5,7 @@ using MyRecipeBook.Domain.Repositories;
 using MyRecipeBook.Domain.Repositories.User;
 using MyRecipeBook.Infrastucture.DataAccess;
 using MyRecipeBook.Infrastucture.DataAccess.Repositories;
+using MyRecipeBook.Infrastucture.Extensions;
 
 namespace MyRecipeBook.Infrastucture;
 public static class DependencyInjectionExtension
@@ -17,7 +18,7 @@ public static class DependencyInjectionExtension
 
     private static void AddDbContext_SqlServer(IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("Connection");
+        var connectionString = configuration.ConnectionString();
 
         services.AddDbContext<MyRecipeBookDbContext>(dbContextOptions =>
         {
