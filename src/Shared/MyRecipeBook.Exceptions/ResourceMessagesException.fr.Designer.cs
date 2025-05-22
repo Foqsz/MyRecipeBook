@@ -90,9 +90,9 @@ namespace MyRecipeBook.Exceptions {
         /// <summary>
         ///   Looks up a localized string similar to Le mot de passe doit comporter plus de 6 caractères..
         /// </summary>
-        public static string PASSWORD_EMPTY {
+        public static string PASSWORD_INVALID {
             get {
-                return ResourceManager.GetString("PASSWORD_EMPTY", resourceCulture);
+                return ResourceManager.GetString("PASSWORD_INVALID", resourceCulture);
             }
         }
     }
