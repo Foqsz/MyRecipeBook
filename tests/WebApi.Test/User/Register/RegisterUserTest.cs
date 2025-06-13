@@ -9,22 +9,18 @@ using System.Text.Json;
 using WebApi.Test.InlineData;
 
 namespace WebApi.Test.User.Register;
-public class RegisterUserTest : IClassFixture<CustomWebApplicationFactory>
+public class RegisterUserTest : MyRecipeBookClassFixture
 {
     private readonly string method = "user";
-    
-    private readonly HttpClient _httpClient;
-    public RegisterUserTest(CustomWebApplicationFactory factory)
-    {
-        _httpClient = factory.CreateClient();
-    }
+
+    public RegisterUserTest(CustomWebApplicationFactory factory) : base(factory) { }
 
     [Fact]
     public async Task Sucess()
     {
         var request = RequestRegisterUserJsonBuilder.Build();
 
-        var response= await _httpClient.PostAsJsonAsync("User", request);
+        var response= await DoPost(method, request);
 
         response.StatusCode.ShouldBe<HttpStatusCode>(HttpStatusCode.Created);
 
@@ -44,12 +40,7 @@ public class RegisterUserTest : IClassFixture<CustomWebApplicationFactory>
         var request = RequestRegisterUserJsonBuilder.Build();
         request.Name = string.Empty;
 
-        if (_httpClient.DefaultRequestHeaders.Contains("Accept-Language"))
-            _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
-
-        _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
-
-        var response = await _httpClient.PostAsJsonAsync(method, request);
+        var response = await DoPost(method, request, culture);
 
         response.StatusCode.ShouldBe<HttpStatusCode>(HttpStatusCode.BadRequest);
 
@@ -71,12 +62,7 @@ public class RegisterUserTest : IClassFixture<CustomWebApplicationFactory>
         var request = RequestRegisterUserJsonBuilder.Build();
         request.Password = string.Empty;
 
-        if (_httpClient.DefaultRequestHeaders.Contains("Accept-Language"))
-            _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
-
-        _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
-
-        var response = await _httpClient.PostAsJsonAsync(method, request);
+        var response = await DoPost(method, request, culture);
 
         response.StatusCode.ShouldBe<HttpStatusCode>(HttpStatusCode.BadRequest);
 
@@ -98,20 +84,15 @@ public class RegisterUserTest : IClassFixture<CustomWebApplicationFactory>
         // Arrange: Register a user with a specific email
         var request = RequestRegisterUserJsonBuilder.Build();
 
-        if (_httpClient.DefaultRequestHeaders.Contains("Accept-Language"))
-            _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
-
-        _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
-
         // First registration should succeed
-        var firstResponse = await _httpClient.PostAsJsonAsync("User", request);
+        var firstResponse = await DoPost(method, request, culture);
         firstResponse.StatusCode.ShouldBe(HttpStatusCode.Created);
 
         // Act: Try to register again with the same email
         var duplicateRequest = RequestRegisterUserJsonBuilder.Build();
         duplicateRequest.Email = request.Email;
 
-        var response = await _httpClient.PostAsJsonAsync("User", duplicateRequest);
+        var response = await DoPost(method, duplicateRequest, culture);
 
         // Assert: Should return BadRequest with the correct error message
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
