@@ -9,6 +9,7 @@ using MyRecipeBook.Infrastucture.DataAccess;
 using MyRecipeBook.Infrastucture.DataAccess.Repositories;
 using MyRecipeBook.Infrastucture.Extensions;
 using MyRecipeBook.Infrastucture.Security.Tokens.Access.Generator;
+using MyRecipeBook.Infrastucture.Security.Tokens.Access.Validator;
 using System.Reflection;
 
 namespace MyRecipeBook.Infrastucture;
@@ -62,6 +63,7 @@ public static class DependencyInjectionExtension
         var expirationTimeMinutes = configuration.GetValue<uint>("Settings:Jwt:ExpirationTimeMinutes");
         var signingKey = configuration.GetValue<string>("Settings:Jwt:SigningKey");
 
-        services.AddScoped<IAcessTokenGenerator>(option => new JwtTokenGenerator(expirationTimeMinutes, signingKey!));
+        services.AddScoped<IAccessTokenGenerator>(option => new JwtTokenGenerator(expirationTimeMinutes, signingKey!));
+        services.AddScoped<IAccessTokenValidator>(option => new JwtTokenValidator(signingKey!));
     }
 }
