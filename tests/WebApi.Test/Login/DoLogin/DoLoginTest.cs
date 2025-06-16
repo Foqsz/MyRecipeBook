@@ -43,6 +43,7 @@ public class DoLoginTest : MyRecipeBookClassFixture
 
         //acessa o documento, esse documento tem uma propriedade "name", pego como string o valor dessa propriedade
         responseData.RootElement.GetProperty("name").GetString().ShouldNotBeNullOrWhiteSpace(_name);
+        responseData.RootElement.GetProperty("tokens").GetProperty("accessToken").GetString().ShouldNotBeNullOrEmpty();
     }
 
     [Theory]
