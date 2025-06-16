@@ -30,6 +30,7 @@ public class RegisterUserTest : MyRecipeBookClassFixture
 
         //acessa o documento, esse documento tem uma propriedade "name", pego como string o valor dessa propriedade
         responseData.RootElement.GetProperty("name").GetString().ShouldNotBeNullOrWhiteSpace(request.Name);
+        responseData.RootElement.GetProperty("tokens").GetProperty("accessToken").GetString().ShouldNotBeNullOrEmpty();
     }
 
 
