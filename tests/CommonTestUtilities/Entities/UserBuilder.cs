@@ -1,5 +1,5 @@
 ﻿using Bogus;
-using CommonTestUtilities.Cryptografhy;
+using CommonTestUtilities.Cryptography;
 using MyRecipeBook.Domain.Entities;
 
 namespace CommonTestUtilities.Entities;
