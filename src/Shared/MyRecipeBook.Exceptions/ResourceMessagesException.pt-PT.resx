@@ -135,6 +135,12 @@
   <data name="NO_TOKEN" xml:space="preserve">
     <value>Nenhum token localizado.</value>
   </data>
+  <data name="PASSWORD_DIFFERENT_CURRENT_PASSWORD" xml:space="preserve">
+    <value>A nova palavra-passe tem de ser diferente da atual.</value>
+  </data>
+  <data name="PASSWORD_EMPTY" xml:space="preserve">
+    <value>A palavra-passe não pode estar vazia.</value>
+  </data>
   <data name="PASSWORD_INVALID" xml:space="preserve">
     <value>A palavra-passe deve ter mais de 6 caracteres.</value>
   </data>

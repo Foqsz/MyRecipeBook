@@ -135,6 +135,12 @@
   <data name="NO_TOKEN" xml:space="preserve">
     <value>Aucun jeton trouvé.</value>
   </data>
+  <data name="PASSWORD_DIFFERENT_CURRENT_PASSWORD" xml:space="preserve">
+    <value>Le nouveau mot de passe doit être différent de l'actuel.</value>
+  </data>
+  <data name="PASSWORD_EMPTY" xml:space="preserve">
+    <value>Le mot de passe ne peut pas être vide.</value>
+  </data>
   <data name="PASSWORD_INVALID" xml:space="preserve">
     <value>Le mot de passe doit comporter plus de 6 caractères.</value>
   </data>
