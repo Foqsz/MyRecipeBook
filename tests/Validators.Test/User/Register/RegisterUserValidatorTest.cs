@@ -76,7 +76,6 @@ public class RegisterUserValidatorTest
     }
 
     [Theory]
-    [InlineData(0)]
     [InlineData(1)]
     [InlineData(2)]
     [InlineData(3)]
@@ -86,7 +85,7 @@ public class RegisterUserValidatorTest
     {
         var validator = new RegisterUserValidator();
 
-        var request = RequestRegisterUserJsonBuilder.Build(passwordLenght); 
+        var request = RequestRegisterUserJsonBuilder.Build(passwordLenght);
 
         var result = validator.Validate(request);
 
@@ -95,5 +94,22 @@ public class RegisterUserValidatorTest
         // Deve retornar um único erro com a mensagem de senha invalida
         result.Errors.Single(e => e.ErrorMessage == ResourceMessagesException.PASSWORD_INVALID)
               .ErrorMessage.ShouldBe(ResourceMessagesException.PASSWORD_INVALID);
+    }
+
+    [Fact]
+    public void Error_Password_Empty()
+    {
+        var validator = new RegisterUserValidator();
+
+        var request = RequestRegisterUserJsonBuilder.Build();
+        request.Password = string.Empty;
+
+        var result = validator.Validate(request);
+
+        result.IsValid.ShouldBeFalse();
+
+        // Deve retornar um único erro com a mensagem de senha invalida
+        result.Errors.Single(e => e.ErrorMessage == ResourceMessagesException.PASSWORD_EMPTY)
+              .ErrorMessage.ShouldBe(ResourceMessagesException.PASSWORD_EMPTY);
     }
 }

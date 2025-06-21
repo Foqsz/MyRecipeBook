@@ -73,7 +73,7 @@ public class RegisterUserTest : MyRecipeBookClassFixture
 
         var errors = responseData.RootElement.GetProperty("errors").EnumerateArray();
 
-        var expectedMessage = ResourceMessagesException.ResourceManager.GetString("PASSWORD_INVALID", new CultureInfo(culture));
+        var expectedMessage = ResourceMessagesException.ResourceManager.GetString("PASSWORD_EMPTY", new CultureInfo(culture));
 
         errors.ShouldContain(error => error.GetString()!.Equals(expectedMessage));
     }
