@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="COOKING_TIME_NOT_SUPPORTED" xml:space="preserve">
+    <value>The specified cooking time is not supported.</value>
+  </data>
+  <data name="DIFFICULTY_LEVEL_NOT_SUPPORTED" xml:space="preserve">
+    <value>The specified difficulty level is not supported.</value>
+  </data>
   <data name="EMAIL_ALREADY_REGISTERED" xml:space="preserve">
     <value>Email already registered</value>
   </data>
@@ -128,6 +134,9 @@
   </data>
   <data name="EMAIL_OR_PASSWORD_INVALID" xml:space="preserve">
     <value>Invalid email and/or password.</value>
+  </data>
+  <data name="GENERATE_ONE_RECIPE_PER_DAY" xml:space="preserve">
+    <value>You can only generate one recipe per day.</value>
   </data>
   <data name="NAME_EMPTY" xml:space="preserve">
     <value>The cannot be empty.</value>
@@ -143,6 +152,12 @@
   </data>
   <data name="PASSWORD_INVALID" xml:space="preserve">
     <value>The password must be longer than 6 characters.</value>
+  </data>
+  <data name="RECIPE_NOT_FOUND" xml:space="preserve">
+    <value>Recipe not found.</value>
+  </data>
+  <data name="RECIPE_TITLE_EMPTY" xml:space="preserve">
+    <value>The recipe title cannot be empty.</value>
   </data>
   <data name="UNKNOWN_ERROR" xml:space="preserve">
     <value>Unknown error</value>
