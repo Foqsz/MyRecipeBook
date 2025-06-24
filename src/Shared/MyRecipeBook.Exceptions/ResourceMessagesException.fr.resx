@@ -117,11 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AT_LEAST_ONE_INGREDIENT" xml:space="preserve">
+    <value>Au moins un ingrédient doit être renseigné.</value>
+  </data>
+  <data name="AT_LEAST_ONE_INSTRUCTION" xml:space="preserve">
+    <value>Au moins une instruction doit être renseignée.</value>
+  </data>
   <data name="COOKING_TIME_NOT_SUPPORTED" xml:space="preserve">
     <value>Le temps de cuisson spécifié n’est pas pris en charge.</value>
   </data>
   <data name="DIFFICULTY_LEVEL_NOT_SUPPORTED" xml:space="preserve">
     <value>Le niveau de difficulté spécifié n’est pas pris en charge.</value>
+  </data>
+  <data name="DISH_TYPE_NOT_SUPPORTED" xml:space="preserve">
+    <value>Le type de plat spécifié n’est pas pris en charge.</value>
   </data>
   <data name="EMAIL_ALREADY_REGISTERED" xml:space="preserve">
     <value>Email déjà enregistré</value>
@@ -138,8 +147,20 @@
   <data name="GENERATE_ONE_RECIPE_PER_DAY" xml:space="preserve">
     <value>Vous ne pouvez générer qu’une seule recette par jour.</value>
   </data>
+  <data name="INGREDIENT_EMPTY" xml:space="preserve">
+    <value>L’ingrédient ne peut pas être vide.</value>
+  </data>
+  <data name="INSTRUCTION_EMPTY" xml:space="preserve">
+    <value>L’instruction ne peut pas être vide.</value>
+  </data>
+  <data name="INSTRUCTION_EXCEEDS_LIMIT_CHARACTERS" xml:space="preserve">
+    <value>L’instruction dépasse la limite maximale de caractères autorisée.</value>
+  </data>
   <data name="NAME_EMPTY" xml:space="preserve">
     <value>Le non ne peut pas être vide.</value>
+  </data>
+  <data name="NON_NEGATIVE_AND_NON_EMPTY_INSTRUCTION_STEP" xml:space="preserve">
+    <value>Le numéro de l’étape doit être un nombre positif ou nul.</value>
   </data>
   <data name="NO_TOKEN" xml:space="preserve">
     <value>Aucun jeton trouvé.</value>
@@ -158,6 +179,9 @@
   </data>
   <data name="RECIPE_TITLE_EMPTY" xml:space="preserve">
     <value>Le titre de la recette ne peut pas être vide.</value>
+  </data>
+  <data name="TWO_OR_MORE_INSTRUCTIONS_SAME_ORDER" xml:space="preserve">
+    <value>Deux ou plusieurs instructions ont le même ordre. Chaque étape doit avoir un ordre unique.</value>
   </data>
   <data name="UNKNOWN_ERROR" xml:space="preserve">
     <value>Erreur inconnue.</value>
