@@ -1,4 +1,5 @@
 ﻿using CommonTestUtilities.Requests;
+using CommonTestUtilities.Tokens;
 using Shouldly;
 using System.Net;
 
@@ -26,6 +27,18 @@ public class UpdateUserInvalidTokenTest : MyRecipeBookClassFixture
         var request = RequestUpdateUserJsonBuilder.Build();
 
         var response = await DoPut(METHOD, request, token: string.Empty);
+
+        response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
+    public async Task Error_Token_With_User_NotFound()
+    {
+        var request = RequestUpdateUserJsonBuilder.Build();
+
+        var token = JwtTokenGeneratorBuild.Build().Generate(Guid.NewGuid());
+
+        var response = await DoPut(METHOD, request, token: token);
 
         response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
     }
