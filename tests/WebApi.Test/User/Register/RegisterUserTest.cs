@@ -20,7 +20,7 @@ public class RegisterUserTest : MyRecipeBookClassFixture
     {
         var request = RequestRegisterUserJsonBuilder.Build();
 
-        var response= await DoPost(method, request);
+        var response= await DoPost(method: method, request: request);
 
         response.StatusCode.ShouldBe<HttpStatusCode>(HttpStatusCode.Created);
 
@@ -41,7 +41,7 @@ public class RegisterUserTest : MyRecipeBookClassFixture
         var request = RequestRegisterUserJsonBuilder.Build();
         request.Name = string.Empty;
 
-        var response = await DoPost(method, request, culture);
+        var response = await DoPost(method: method, request: request, culture: culture);
 
         response.StatusCode.ShouldBe<HttpStatusCode>(HttpStatusCode.BadRequest);
 
@@ -63,7 +63,7 @@ public class RegisterUserTest : MyRecipeBookClassFixture
         var request = RequestRegisterUserJsonBuilder.Build();
         request.Password = string.Empty;
 
-        var response = await DoPost(method, request, culture);
+        var response = await DoPost(method: method, request: request, culture: culture);
 
         response.StatusCode.ShouldBe<HttpStatusCode>(HttpStatusCode.BadRequest);
 
@@ -86,14 +86,14 @@ public class RegisterUserTest : MyRecipeBookClassFixture
         var request = RequestRegisterUserJsonBuilder.Build();
 
         // First registration should succeed
-        var firstResponse = await DoPost(method, request, culture);
+        var firstResponse = await DoPost(method:method, request: request, culture: culture);
         firstResponse.StatusCode.ShouldBe(HttpStatusCode.Created);
 
         // Act: Try to register again with the same email
         var duplicateRequest = RequestRegisterUserJsonBuilder.Build();
         duplicateRequest.Email = request.Email;
 
-        var response = await DoPost(method, duplicateRequest, culture);
+        var response = await DoPost(method: method, request: duplicateRequest, culture: culture);
 
         // Assert: Should return BadRequest with the correct error message
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
