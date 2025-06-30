@@ -4,6 +4,7 @@ using MyRecipeBook.Application.Services.AutoMapper;
 using MyRecipeBook.Application.UseCases.Login.DoLogin;
 using MyRecipeBook.Application.UseCases.Recipe;
 using MyRecipeBook.Application.UseCases.Recipe.Filter;
+using MyRecipeBook.Application.UseCases.Recipe.GetById;
 using MyRecipeBook.Application.UseCases.User.ChangePassword;
 using MyRecipeBook.Application.UseCases.User.Profile;
 using MyRecipeBook.Application.UseCases.User.Register;
@@ -15,11 +16,22 @@ public static class DependencyInjectionExtension
 {
     public static void AddAplication(this IServiceCollection services, IConfiguration configuration)
     {
-        AddAutoMapper(services, configuration);
+        AddAutoMapper(services);
+        AddIdEncoder(services, configuration);
         AddUseCases(services);
     }
 
-    private static void AddAutoMapper(IServiceCollection services, IConfiguration configuration)
+    private static void AddAutoMapper(IServiceCollection services)
+    {   
+        services.AddScoped(option => new AutoMapper.MapperConfiguration(autoMapperOptions =>
+        {
+            var sqids = option.GetService<SqidsEncoder<long>>()!;
+
+            autoMapperOptions.AddProfile(new AutoMappingProfile(sqids));
+        }).CreateMapper());
+    }
+
+    private static void AddIdEncoder(IServiceCollection services, IConfiguration configuration)
     {
         var sqids = new SqidsEncoder<long>(new()
         {
@@ -27,10 +39,7 @@ public static class DependencyInjectionExtension
             Alphabet = configuration.GetValue<string>("Settings:IdCrypographyAlphabet")!
         });
 
-        services.AddScoped(option => new AutoMapper.MapperConfiguration(options =>
-        {
-            options.AddProfile(new AutoMappingProfile(sqids));
-        }).CreateMapper());
+        services.AddSingleton(sqids);
     }
 
     private static void AddUseCases(IServiceCollection services)
@@ -42,5 +51,6 @@ public static class DependencyInjectionExtension
         services.AddScoped<IChangePasswordUseCase, ChangePasswordUseCase>();
         services.AddScoped<IRegisterRecipeUseCase, RegisterRecipeUseCase>();
         services.AddScoped<IFilterRecipeUseCase, FilterRecipeUseCase>();
+        services.AddScoped<IGetRecipeByIdUseCase, GetRecipeByIdUseCase>();
     }
 }
