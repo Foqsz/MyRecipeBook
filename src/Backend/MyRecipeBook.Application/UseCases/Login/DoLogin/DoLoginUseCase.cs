@@ -3,6 +3,7 @@ using MyRecipeBook.Communication.Responses;
 using MyRecipeBook.Domain.Repositories.User;
 using MyRecipeBook.Domain.Security.Cryptography;
 using MyRecipeBook.Domain.Security.Tokens;
+using MyRecipeBook.Exceptions;
 using MyRecipeBook.Exceptions.ExceptionsBase;
 
 namespace MyRecipeBook.Application.UseCases.Login.DoLogin;
@@ -23,7 +24,7 @@ public class DoLoginUseCase : IDoLoginUseCase
     {
         var encriptedPassword = _passwordEncripter.Encrypt(request.Password);
 
-        var user = await _repository.GetByEmailAndPassword(request.Email, encriptedPassword) ?? throw new InvalidLoginException();
+        var user = await _repository.GetByEmailAndPassword(request.Email, encriptedPassword) ?? throw new InvalidLoginException(ResourceMessagesException.EMAIL_OR_PASSWORD_INVALID);
 
         return new ResponseRegisteredUserJson
         {

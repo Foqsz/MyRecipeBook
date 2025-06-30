@@ -42,8 +42,8 @@ public class UpdateUserUseCaseTest
 
         var exception = await Should.ThrowAsync<ErrorOnValidationException>(() => act());
 
-        exception.ErrorMessages.Count.ShouldBe(1);
-        exception.ErrorMessages.ShouldContain(ResourceMessagesException.NAME_EMPTY);
+        exception.GetErrorMessages().Count.ShouldBe(1);
+        exception.GetErrorMessages().ShouldContain(ResourceMessagesException.NAME_EMPTY);
 
         user.Name.ShouldNotBe(request.Name);
         user.Email.ShouldNotBe(request.Email);
@@ -62,8 +62,8 @@ public class UpdateUserUseCaseTest
 
         var exception = await Should.ThrowAsync<ErrorOnValidationException>(() => act());
 
-        exception.ErrorMessages.Count.ShouldBe(1);
-        exception.ErrorMessages.ShouldContain(ResourceMessagesException.EMAIL_ALREADY_REGISTERED);
+        exception.GetErrorMessages().Count.ShouldBe(1);
+        exception.GetErrorMessages().ShouldContain(ResourceMessagesException.EMAIL_ALREADY_REGISTERED);
 
         user.Name.ShouldNotBe(request.Name);
         user.Email.ShouldNotBe(request.Email);

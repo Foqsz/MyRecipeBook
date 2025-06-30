@@ -45,9 +45,9 @@ public class FilterRecipeUseCaseTest
         var exception = await Should.ThrowAsync<ErrorOnValidationException>(async () => await useCase.Execute(request));
 
         exception.ShouldNotBeNull();
-        exception.ErrorMessages.ShouldNotBeNull();
-        exception.ErrorMessages.Count.ShouldBe(1);
-        exception.ErrorMessages[0].ShouldBe(ResourceMessagesException.COOKING_TIME_NOT_SUPPORTED);
+        exception.GetErrorMessages().ShouldNotBeNull();
+        exception.GetErrorMessages().Count.ShouldBe(1);
+        exception.GetErrorMessages()[0].ShouldBe(ResourceMessagesException.COOKING_TIME_NOT_SUPPORTED);
 
 
     }
