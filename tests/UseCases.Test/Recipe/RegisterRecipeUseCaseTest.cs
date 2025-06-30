@@ -42,8 +42,8 @@ public class RegisterRecipeUseCaseTest
 
         var exception = await Should.ThrowAsync<ErrorOnValidationException>(() => act());
 
-        exception.ErrorMessages.Count.ShouldBe(1);
-        exception.ErrorMessages.ShouldContain(ResourceMessagesException.RECIPE_TITLE_EMPTY);
+        exception.GetErrorMessages().Count.ShouldBe(1);
+        exception.GetErrorMessages().ShouldContain(ResourceMessagesException.RECIPE_TITLE_EMPTY);
     }
 
     private static RegisterRecipeUseCase CreateUseCase(MyRecipeBook.Domain.Entities.User user)

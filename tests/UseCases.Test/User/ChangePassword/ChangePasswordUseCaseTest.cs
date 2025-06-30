@@ -48,8 +48,8 @@ public class ChangePasswordUseCaseTest
         Func<Task> act = async () => await useCase.Execute(request);
 
         var exception = await Should.ThrowAsync<ErrorOnValidationException>(act);
-        exception.ErrorMessages.Count.ShouldBe(1);
-        exception.ErrorMessages.ShouldContain(ResourceMessagesException.PASSWORD_EMPTY);
+        exception.GetErrorMessages().Count.ShouldBe(1);
+        exception.GetErrorMessages().ShouldContain(ResourceMessagesException.PASSWORD_EMPTY);
 
         var passwordEncripter = PasswordEncripterBuilder.Build();
 
@@ -70,8 +70,8 @@ public class ChangePasswordUseCaseTest
         Func<Task> act = async () => await useCase.Execute(request);
 
         var exception = await Should.ThrowAsync<ErrorOnValidationException>(act);
-        exception.ErrorMessages.Count.ShouldBe(1);
-        exception.ErrorMessages.ShouldContain(ResourceMessagesException.PASSWORD_DIFFERENT_CURRENT_PASSWORD);
+        exception.GetErrorMessages().Count.ShouldBe(1);
+        exception.GetErrorMessages().ShouldContain(ResourceMessagesException.PASSWORD_DIFFERENT_CURRENT_PASSWORD);
 
         var passwordEncripter = PasswordEncripterBuilder.Build();
         
