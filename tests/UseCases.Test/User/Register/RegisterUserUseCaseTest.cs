@@ -38,9 +38,9 @@ public class RegisterUserUseCaseTest
 
         var exception = await act.ShouldThrowAsync<ErrorOnValidationException>();
         
-        exception.ErrorMessages.Count.ShouldBe(1);
+        exception.GetErrorMessages().Count.ShouldBe(1);
 
-        exception.ErrorMessages.First().ShouldBe(ResourceMessagesException.EMAIL_ALREADY_REGISTERED);
+        exception.GetErrorMessages().First().ShouldBe(ResourceMessagesException.EMAIL_ALREADY_REGISTERED);
     }
 
     [Fact]
@@ -55,9 +55,9 @@ public class RegisterUserUseCaseTest
 
         var exception = await act.ShouldThrowAsync<ErrorOnValidationException>();
 
-        exception.ErrorMessages.Count.ShouldBe(1);
+        exception.GetErrorMessages().Count.ShouldBe(1);
 
-        exception.ErrorMessages.First().ShouldBe(ResourceMessagesException.NAME_EMPTY);
+        exception.GetErrorMessages().First().ShouldBe(ResourceMessagesException.NAME_EMPTY);
     }
 
     private static RegisterUserUseCase CreateUseCase(string? email = null)
