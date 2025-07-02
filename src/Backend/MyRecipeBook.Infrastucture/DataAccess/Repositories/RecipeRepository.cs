@@ -58,4 +58,21 @@ public class RecipeRepository : IRecipeWriteOnlyRepository, IRecipeReadOnlyRepos
             .Include(recipe => recipe.DishTypes)
             .FirstOrDefaultAsync(recipe => recipe.Active && recipe.Id == recipeId && recipe.UserId == user.Id);
     }
+
+    public async Task<bool> RecipeExists(User user, long recipeId)
+    {
+        var existRecipe = await _dbContext
+            .Recipes
+            .AsNoTracking()
+            .AnyAsync(recipe => recipe.Active && recipe.Id == recipeId && recipe.UserId == user.Id);
+
+        return existRecipe;
+    }
+
+    public async Task Delete(long recipeId)
+    {
+        var recipe = await _dbContext.Recipes.FindAsync(recipeId);
+
+        _dbContext.Recipes.Remove(recipe!);
+    }
 }
