@@ -25,5 +25,12 @@ public class RecipeReadOnlyRepositoryBuilder
         return this;
     }
 
+    public RecipeReadOnlyRepositoryBuilder RecipeExists(User user, Recipe recipe, bool exists)
+    {
+        _repository.Setup(repository => repository.RecipeExists(user, recipe.Id)).ReturnsAsync(exists);
+
+        return this;
+    }
+
     public IRecipeReadOnlyRepository Build() => _repository.Object;
 }
