@@ -36,6 +36,14 @@ public class MyRecipeBookClassFixture : IClassFixture<CustomWebApplicationFactor
         return await _httpClient.PutAsJsonAsync(method, request);
     }
 
+    protected async Task<HttpResponseMessage> DoDelete(string method, string token, string culture = "pt-BR")
+    {
+        ChangeRequestCulture(culture);
+        AuthorizeRequest(token);
+
+        return await _httpClient.DeleteAsync(method);
+    }
+
     private void ChangeRequestCulture(string culture)
     {
         if (_httpClient.DefaultRequestHeaders.Contains("Accept-Language"))
