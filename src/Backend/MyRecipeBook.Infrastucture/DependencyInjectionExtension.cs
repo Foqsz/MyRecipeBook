@@ -53,6 +53,7 @@ public static class DependencyInjectionExtension
         services.AddScoped<IUserUpdateOnlyRepository, UserRepository>();
         services.AddScoped<IRecipeWriteOnlyRepository, RecipeRepository>();
         services.AddScoped<IRecipeReadOnlyRepository, RecipeRepository>();
+        services.AddScoped<IRecipeUpdateOnlyRepository, RecipeRepository>();
     }
 
     private static void AddFluenMigration_SqlServer(IServiceCollection services, IConfiguration configuration)
