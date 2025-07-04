@@ -2,12 +2,12 @@
 using MyRecipeBook.Communication.Request;
 using MyRecipeBook.Communication.Responses;
 using MyRecipeBook.Domain.Extensions;
-using MyRecipeBook.Domain.Repositories;
 using MyRecipeBook.Domain.Repositories.Recipe;
+using MyRecipeBook.Domain.Repositories.UnitOfWork;
 using MyRecipeBook.Domain.Services.LoggedUser;
 using MyRecipeBook.Exceptions.ExceptionsBase;
 
-namespace MyRecipeBook.Application.UseCases.Recipe;
+namespace MyRecipeBook.Application.UseCases.Recipe.Register;
 public class RegisterRecipeUseCase : IRegisterRecipeUseCase
 {
     private readonly IRecipeWriteOnlyRepository _repository;

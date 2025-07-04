@@ -1,6 +1,6 @@
 ﻿using MyRecipeBook.Communication.Request;
 using MyRecipeBook.Domain.Extensions;
-using MyRecipeBook.Domain.Repositories;
+using MyRecipeBook.Domain.Repositories.UnitOfWork;
 using MyRecipeBook.Domain.Repositories.User;
 using MyRecipeBook.Domain.Services.LoggedUser;
 using MyRecipeBook.Exceptions;

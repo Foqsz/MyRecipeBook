@@ -1,4 +1,4 @@
-﻿using MyRecipeBook.Domain.Repositories;
+﻿using MyRecipeBook.Domain.Repositories.UnitOfWork;
 
 namespace MyRecipeBook.Infrastucture.DataAccess;
 public class UnitOfWork : IUnitOfWork
