@@ -27,7 +27,7 @@ public class FilterRecipeInvalidTokenTest : MyRecipeBookClassFixture
     {
         var request = RequestFilterRecipeJsonBuilder.Build();
 
-        var response = await DoPost(method: METHOD, request: request, token: null);
+        var response = await DoPost(method: METHOD, request: request, token: string.Empty);
 
         response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
     }
