@@ -80,6 +80,17 @@ public class RecipeRepository : IRecipeWriteOnlyRepository, IRecipeReadOnlyRepos
     }
 
     public void Update(Recipe recipe) => _dbContext.Recipes.Update(recipe);
+    public async Task<IList<Recipe>> GetForDashboard(User user)
+    {
+        return await _dbContext
+            .Recipes
+            .AsNoTracking()
+            .Include(recipe => recipe.Ingredients)
+            .Where(recipe => recipe.Active && recipe.UserId == user.Id)
+            .OrderByDescending(recipe => recipe.CreatedOn)
+            .Take(5)
+            .ToListAsync();
+    }
 
     private IIncludableQueryable<Recipe, IList<DishType>> GetFullRecipe()
     {
