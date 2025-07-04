@@ -1,5 +1,5 @@
 ﻿using Moq;
-using MyRecipeBook.Domain.Repositories;
+using MyRecipeBook.Domain.Repositories.UnitOfWork;
 
 namespace CommonTestUtilities.Repositories;
 public class UnitOfWorkBuilder

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MyRecipeBook.Communication.Request;
 using MyRecipeBook.Communication.Responses;
-using MyRecipeBook.Domain.Repositories;
+using MyRecipeBook.Domain.Repositories.UnitOfWork;
 using MyRecipeBook.Domain.Repositories.User;
 using MyRecipeBook.Domain.Security.Cryptography;
 using MyRecipeBook.Domain.Security.Tokens;
