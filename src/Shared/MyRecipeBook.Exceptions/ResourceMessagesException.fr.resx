@@ -132,6 +132,9 @@
   <data name="DISH_TYPE_NOT_SUPPORTED" xml:space="preserve">
     <value>Le type de plat spécifié n’est pas pris en charge.</value>
   </data>
+  <data name="DUPLICATED_INGREDIENTS_IN_LIST" xml:space="preserve">
+    <value>Il y a des ingrédients en double dans la liste. Veuillez les supprimer.</value>
+  </data>
   <data name="EMAIL_ALREADY_REGISTERED" xml:space="preserve">
     <value>Email déjà enregistré</value>
   </data>
@@ -150,11 +153,17 @@
   <data name="INGREDIENT_EMPTY" xml:space="preserve">
     <value>L’ingrédient ne peut pas être vide.</value>
   </data>
+  <data name="INGREDIENT_NOT_FOLLOWING_PATTERN" xml:space="preserve">
+    <value>Un ou plusieurs ingrédients ne respectent pas le format requis. Veuillez vérifier le modèle.</value>
+  </data>
   <data name="INSTRUCTION_EMPTY" xml:space="preserve">
     <value>L’instruction ne peut pas être vide.</value>
   </data>
   <data name="INSTRUCTION_EXCEEDS_LIMIT_CHARACTERS" xml:space="preserve">
     <value>L’instruction dépasse la limite maximale de caractères autorisée.</value>
+  </data>
+  <data name="INVALID_NUMBER_INGREDIENTS" xml:space="preserve">
+    <value>Nombre invalide d'ingrédients.</value>
   </data>
   <data name="NAME_EMPTY" xml:space="preserve">
     <value>Le non ne peut pas être vide.</value>
