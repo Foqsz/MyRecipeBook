@@ -132,6 +132,9 @@
   <data name="DISH_TYPE_NOT_SUPPORTED" xml:space="preserve">
     <value>O tipo de prato indicado não é suportado.</value>
   </data>
+  <data name="DUPLICATED_INGREDIENTS_IN_LIST" xml:space="preserve">
+    <value>Existem ingredientes duplicados na lista. Por favor, remova os duplicados.</value>
+  </data>
   <data name="EMAIL_ALREADY_REGISTERED" xml:space="preserve">
     <value>E-mail já registrado.</value>
   </data>
@@ -150,11 +153,17 @@
   <data name="INGREDIENT_EMPTY" xml:space="preserve">
     <value>O ingrediente não pode estar vazio.</value>
   </data>
+  <data name="INGREDIENT_NOT_FOLLOWING_PATTERN" xml:space="preserve">
+    <value>Um ou mais ingredientes não seguem o padrão exigido. Por favor, verifique o formato.</value>
+  </data>
   <data name="INSTRUCTION_EMPTY" xml:space="preserve">
     <value>A instrução de preparação não pode estar vazia.</value>
   </data>
   <data name="INSTRUCTION_EXCEEDS_LIMIT_CHARACTERS" xml:space="preserve">
     <value>A instrução ultrapassa o limite máximo de caracteres permitido.</value>
+  </data>
+  <data name="INVALID_NUMBER_INGREDIENTS" xml:space="preserve">
+    <value>Número inválido de ingredientes.</value>
   </data>
   <data name="NAME_EMPTY" xml:space="preserve">
     <value>O nome não pode estar vazio.</value>
