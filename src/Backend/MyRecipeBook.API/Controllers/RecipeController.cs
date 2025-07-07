@@ -43,8 +43,8 @@ public class RecipeController : MyRecipeBookBaseController
     [ProducesResponseType(typeof(ResponseRecipeJson), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(
-        [FromServices] IGetRecipeByIdUseCase useCase, 
-        [FromRoute] [ModelBinder(typeof(MyRecipeBooIdBinder))]long id)
+        [FromServices] IGetRecipeByIdUseCase useCase,
+        [FromRoute][ModelBinder(typeof(MyRecipeBooIdBinder))] long id)
     {
         var response = await useCase.Execute(id);
 
@@ -56,8 +56,8 @@ public class RecipeController : MyRecipeBookBaseController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(
-        [FromServices] IDeleteRecipeUseCase useCase, 
-        [FromRoute][ModelBinder(typeof(MyRecipeBooIdBinder))]long id)
+        [FromServices] IDeleteRecipeUseCase useCase,
+        [FromRoute][ModelBinder(typeof(MyRecipeBooIdBinder))] long id)
     {
         await useCase.Execute(id);
 
@@ -69,11 +69,23 @@ public class RecipeController : MyRecipeBookBaseController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(
-        [FromServices] IUpdateRecipeUseCase useCase, 
-        [FromRoute][ModelBinder(typeof(MyRecipeBooIdBinder))]long id,
+        [FromServices] IUpdateRecipeUseCase useCase,
+        [FromRoute][ModelBinder(typeof(MyRecipeBooIdBinder))] long id,
         [FromBody] RequestRecipeJson request)
     {
         await useCase.Execute(id, request);
         return NoContent();
+    }
+
+    [HttpPost("generate")]
+    [ProducesResponseType(typeof(ResponseGeneratedRecipeJson), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Generate(
+        [FromServices] IGenerateRecipeUseCase useCase,
+        [FromBody] RequestGenerateRecipeJson request)
+    {
+        var response = await useCase.Execute(request);
+
+        return Ok(response);
     }
 }
