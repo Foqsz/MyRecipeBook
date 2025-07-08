@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MyRecipeBook.Exceptions {
+namespace MyRecipeBook.Domain.Services.OpenAI {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace MyRecipeBook.Exceptions {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ResourceMessagesExceptions_fr {
+    public class ResourceOpenAI {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public ResourceMessagesExceptions_fr() {
+        public ResourceOpenAI() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace MyRecipeBook.Exceptions {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MyRecipeBook.Exceptions.ResourceMessagesExceptions-fr", typeof(ResourceMessagesExceptions_fr).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MyRecipeBook.Domain.Services.OpenAI.ResourceOpenAI", typeof(ResourceOpenAI).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -59,40 +59,21 @@ namespace MyRecipeBook.Exceptions {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
-        ///   Looks up a localized string similar to L&apos;e-mail ne doit pas être vide..
+        ///   Looks up a localized string similar to You are a chef who knows many tasty recipes. When the user gives you a list of ingredients separated by &apos;;&apos;, you reply with just one recipe that is easy to create with the ingredients given.
+        ///
+        ///You will create a recipe with the following structure and order: 
+        ///
+        ///[Recipe Name]
+        ///
+        ///[time needed to prepare it, where 0 means less than 10 minutes, 1 means between 10 and 30 minutes, 2 means between 30 and 60 minutes or 3 means more than 60 minutes]
+        ///
+        ///[List of ingredients supplied and those added by you separated  [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string EMAIL_EMPTY {
+        public static string STARTING_GENERATE_RECIPE {
             get {
-                return ResourceManager.GetString("EMAIL_EMPTY", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to L&apos;addresse électronique n&apos;est pas valide..
-        /// </summary>
-        public static string EMAIL_INVALID {
-            get {
-                return ResourceManager.GetString("EMAIL_INVALID", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Le non ne peut pas être vide..
-        /// </summary>
-        public static string NAME_EMPTY {
-            get {
-                return ResourceManager.GetString("NAME_EMPTY", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Le mot de passe doit comporter plus de 6 caractères..
-        /// </summary>
-        public static string PASSWORD_INVALID {
-            get {
-                return ResourceManager.GetString("PASSWORD_INVALID", resourceCulture);
+                return ResourceManager.GetString("STARTING_GENERATE_RECIPE", resourceCulture);
             }
         }
     }
