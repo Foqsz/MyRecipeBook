@@ -29,7 +29,7 @@ namespace MyRecipeBook.Exceptions {
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public ResourceMessagesException() {
+        internal ResourceMessagesException() {
         }
         
         /// <summary>
@@ -228,6 +228,15 @@ namespace MyRecipeBook.Exceptions {
         public static string NON_NEGATIVE_AND_NON_EMPTY_INSTRUCTION_STEP {
             get {
                 return ResourceManager.GetString("NON_NEGATIVE_AND_NON_EMPTY_INSTRUCTION_STEP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only images in (PNG, JPG, and JPEG) formats are accepted..
+        /// </summary>
+        public static string ONLY_IMAGES_ACCEPTED {
+            get {
+                return ResourceManager.GetString("ONLY_IMAGES_ACCEPTED", resourceCulture);
             }
         }
         

@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FileTypeChecker.Extensions;
+using FileTypeChecker.Types;
+using Microsoft.AspNetCore.Http;
+using MyRecipeBook.Domain.Extensions;
 using MyRecipeBook.Domain.Repositories.Recipe;
 using MyRecipeBook.Domain.Repositories.UnitOfWork;
 using MyRecipeBook.Domain.Services.LoggedUser;
@@ -27,5 +30,13 @@ public class AddUpdateImageCoverUseCase : IAddUpdateImageCoverUseCase
 
         if (recipe is null)
             throw new NotFoundException(ResourceMessagesException.RECIPE_NOT_FOUND);
+
+        var fileStream = file.OpenReadStream(); 
+
+        if (fileStream.Is<PortableNetworkGraphic>().IsFalse() 
+            && fileStream.Is<JointPhotographicExpertsGroup>().IsFalse())
+        {
+            throw new ErrorOnValidationException([ResourceMessagesException.ONLY_IMAGES_ACCEPTED]); // [ ] versão simplificada de new
+        }
     }
 }
