@@ -1,4 +1,4 @@
-﻿using FileTypeChecker.Extensions;
+using FileTypeChecker.Extensions;
 using FileTypeChecker.Types;
 using Microsoft.AspNetCore.Http;
 using MyRecipeBook.Domain.Extensions;
