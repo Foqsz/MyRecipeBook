@@ -25,12 +25,12 @@ public class RecipeReadOnlyRepositoryBuilder
         return this;
     }
 
-    public RecipeReadOnlyRepositoryBuilder RecipeExists(User user, Recipe recipe, bool exists)
-    {
-        _repository.Setup(repository => repository.RecipeExists(user, recipe.Id)).ReturnsAsync(exists);
+    //public RecipeReadOnlyRepositoryBuilder RecipeExists(User user, Recipe recipe, bool exists)
+    //{
+    //    _repository.Setup(repository => repository.RecipeExists(user, recipe.Id)).ReturnsAsync(exists);
 
-        return this;
-    }
+    //    return this;
+    //}
 
     public RecipeReadOnlyRepositoryBuilder GetForDashboard(User user, IList<Recipe> recipes)
     {
