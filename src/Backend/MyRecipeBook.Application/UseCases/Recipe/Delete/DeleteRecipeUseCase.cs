@@ -28,15 +28,13 @@ public class DeleteRecipeUseCase : IDeleteRecipeUseCase
     {
         var loggedUser = await _loggedUser.User();
 
-        var recipe = await _repositoryRead.RecipeExists(loggedUser, recipeId);
+        var recipe = await _repositoryRead.GetById(loggedUser, recipeId);
 
-        if (recipe.IsFalse())
+        if (recipe is null)
             throw new NotFoundException(ResourceMessagesException.RECIPE_NOT_FOUND);
 
-        var recipeIdentifier = await _repositoryRead.GetById(loggedUser, recipeId);
-
-        if (recipeIdentifier!.ImageIdentifier.NotEmpty())
-            await _blobStorageService.Delete(loggedUser, recipeIdentifier.ImageIdentifier);
+        if (recipe.ImageIdentifier.NotEmpty())
+            await _blobStorageService.Delete(loggedUser, recipe.ImageIdentifier);
 
         await _repositoryWrite.Delete(recipeId);
 
