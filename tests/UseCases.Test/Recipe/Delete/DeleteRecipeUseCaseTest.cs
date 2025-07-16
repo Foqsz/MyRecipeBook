@@ -1,4 +1,5 @@
-﻿using CommonTestUtilities.Entities;
+﻿using CommonTestUtilities.BlobStorage;
+using CommonTestUtilities.Entities;
 using CommonTestUtilities.LoggedUser;
 using CommonTestUtilities.Repositories;
 using MyRecipeBook.Application.UseCases.Recipe.Delete;
@@ -16,7 +17,7 @@ public class DeleteRecipeUseCaseTest
 
         var recipe = RecipeBuilder.Build(user);
 
-        var useCase = CreateUseCase(user, recipe, true);
+        var useCase = CreateUseCase(user, recipe);
 
         Func<Task> act = async () =>
         {
@@ -32,12 +33,11 @@ public class DeleteRecipeUseCaseTest
     {
         (var user, _) = UserBuilder.Build();
 
-        var recipe = RecipeBuilder.Build(user);
-        recipe.Active = false;
+        var recipe = RecipeBuilder.Build(user); 
 
-        var useCase = CreateUseCase(user, recipe, false);
+        var useCase = CreateUseCase(user, recipe);
 
-        var exception = await Should.ThrowAsync<NotFoundException>(async () => await useCase.Execute(recipeId: 1));
+        var exception = await Should.ThrowAsync<NotFoundException>(async () => await useCase.Execute(recipeId: 1000));
 
         exception.ShouldNotBeNull();
         exception.GetErrorMessages().ShouldNotBeNull();
@@ -45,13 +45,14 @@ public class DeleteRecipeUseCaseTest
         exception.GetErrorMessages()[0].ShouldBe(ResourceMessagesException.RECIPE_NOT_FOUND);
     }
 
-    private static DeleteRecipeUseCase CreateUseCase(MyRecipeBook.Domain.Entities.User user, MyRecipeBook.Domain.Entities.Recipe recipe, bool recipeExists)
+    private static DeleteRecipeUseCase CreateUseCase(MyRecipeBook.Domain.Entities.User user, MyRecipeBook.Domain.Entities.Recipe? recipe = null)
     {
         var loggedUser = LoggedUserBuilder.Build(user);
-        var repositoryRead = new RecipeReadOnlyRepositoryBuilder().RecipeExists(user, recipe, recipeExists).Build();
+        var repositoryRead = new RecipeReadOnlyRepositoryBuilder().GetById(user, recipe).Build();
         var repositoryWrite = RecipeWriteOnlyRepositoryBuilder.Build();
         var unitOfWork = UnitOfWorkBuilder.Build();
+        var blobStorage = new BlobStorageServiceBuilder().GetFileUrl(user, recipe?.ImageIdentifier).Build();
 
-        return new DeleteRecipeUseCase(loggedUser, repositoryRead, repositoryWrite, unitOfWork);
+        return new DeleteRecipeUseCase(loggedUser, repositoryRead, repositoryWrite, unitOfWork, blobStorage);
     }
 }

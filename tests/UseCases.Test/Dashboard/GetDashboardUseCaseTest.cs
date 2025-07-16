@@ -1,4 +1,5 @@
-﻿using CommonTestUtilities.Entities;
+﻿using CommonTestUtilities.BlobStorage;
+using CommonTestUtilities.Entities;
 using CommonTestUtilities.LoggedUser;
 using CommonTestUtilities.Mapper;
 using CommonTestUtilities.Repositories;
@@ -28,17 +29,19 @@ public class GetDashboardUseCaseTest
             recipe.Id.ShouldNotBeNullOrWhiteSpace();
             recipe.Title.ShouldNotBeNullOrWhiteSpace();
             recipe.AmountIngredients.ShouldBeGreaterThan(0);
+            recipe.ImageUrl.ShouldNotBeNullOrWhiteSpace();
         } 
     }
 
     private static GetDashboardUseCase CreateUseCase(
         MyRecipeBook.Domain.Entities.User user, 
         IList<MyRecipeBook.Domain.Entities.Recipe> recipes)
-    {
+    {   
         var mapper = MapperBuilder.Build();
         var loggedUser = LoggedUserBuilder.Build(user);
-        var repository = new RecipeReadOnlyRepositoryBuilder().GetForDashboard(user, recipes).Build();  
+        var repository = new RecipeReadOnlyRepositoryBuilder().GetForDashboard(user, recipes).Build();
+        var blobStorage = new BlobStorageServiceBuilder().GetFileUrl(user, recipes).Build();
 
-        return new GetDashboardUseCase(repository, mapper, loggedUser);
+        return new GetDashboardUseCase(repository, mapper, loggedUser, blobStorage);
     }
 }

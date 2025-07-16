@@ -34,7 +34,7 @@ public class RegisterRecipeUseCase : IRegisterRecipeUseCase
         _blobStorageService = blobStorageService;
     }
 
-    public async Task<ResponseRegisteredRecipeJson> Execute(RequestRegiserRecipeFormData request)
+    public async Task<ResponseRegisteredRecipeJson> Execute(RequestRegisterRecipeFormData request)
     {
         Validate(request);
 

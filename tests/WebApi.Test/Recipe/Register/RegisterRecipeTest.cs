@@ -22,11 +22,11 @@ public class RegisterRecipeTest : MyRecipeBookClassFixture
     [Fact]
     public async Task Success()
     {
-        var request = RequestRecipeJsonBuilder.Build();
+        var request = RequestRegisterRecipeFormDataBuilder.Build();
 
         var token = JwtTokenGeneratorBuild.Build().Generate(_userIdentifier);
 
-        var response = await DoPost(method: METHOD, request: request, token: token);
+        var response = await DoPostFormData(method: METHOD, request: request, token: token);
 
         response.StatusCode.ShouldBe(HttpStatusCode.Created);
 
@@ -47,7 +47,7 @@ public class RegisterRecipeTest : MyRecipeBookClassFixture
 
         var token = JwtTokenGeneratorBuild.Build().Generate(_userIdentifier);
 
-        var response = await DoPost(method: METHOD, request: request, token: token, culture: culture);
+        var response = await DoPostFormData(method: METHOD, request: request, token: token, culture: culture);
 
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
