@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using MyRecipeBook.Application.Extensions;
 using MyRecipeBook.Domain.Extensions;
 using MyRecipeBook.Domain.Repositories.Recipe;
