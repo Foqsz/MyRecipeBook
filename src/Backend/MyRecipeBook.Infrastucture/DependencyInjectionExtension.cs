@@ -1,4 +1,5 @@
-﻿using Azure.Storage.Blobs;
+﻿using Azure.Messaging.ServiceBus;
+using Azure.Storage.Blobs;
 using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -21,6 +22,7 @@ using MyRecipeBook.Infrastucture.Security.Cryptography;
 using MyRecipeBook.Infrastucture.Security.Tokens.Access.Generator;
 using MyRecipeBook.Infrastucture.Security.Tokens.Access.Validator;
 using MyRecipeBook.Infrastucture.Services.LoggedUser;
+using MyRecipeBook.Infrastucture.Services.ServiceBus;
 using MyRecipeBook.Infrastucture.Services.Storage;
 using OpenAI.Chat;
 using System.Reflection;
@@ -36,6 +38,7 @@ public static class DependencyInjectionExtension
         AddTokens(services, configuration);
         AddOpenAI(services, configuration);
         AddAzureStorage(services, configuration);
+        AddQueue(services, configuration);
 
         if (configuration.IsUnitTestEnviroment())
             return;
@@ -107,9 +110,21 @@ public static class DependencyInjectionExtension
 
     private static void AddAzureStorage(IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetValue<string>("Settings:Settings:BlobStorage:Azure");
+        var connectionString = configuration.GetValue<string>("Settings:BlobStorage:Azure");
 
         if(connectionString.NotEmpty())
             services.AddScoped<IBlobStorageService>(c => new AzureStorageService(new BlobServiceClient(connectionString)));
+    }
+
+    private static void AddQueue(IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetValue<string>("Settings:ServiceBus:DeleteUserAccount");
+
+        var client = new ServiceBusClient(connectionString, new ServiceBusClientOptions
+        {
+            TransportType = ServiceBusTransportType.AmqpWebSockets
+        }); 
+
+        var deleteQueue = new DeleteUserQueue(client.CreateSender("user"));
     }
 }
