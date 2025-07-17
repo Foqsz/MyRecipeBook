@@ -1,7 +1,7 @@
-﻿using Azure.Storage.Blobs;
+﻿using Azure.Messaging.ServiceBus;
+using Azure.Storage.Blobs;
 using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyRecipeBook.Domain.Extensions;
@@ -12,6 +12,7 @@ using MyRecipeBook.Domain.Security.Cryptography;
 using MyRecipeBook.Domain.Security.Tokens;
 using MyRecipeBook.Domain.Services.LoggedUser;
 using MyRecipeBook.Domain.Services.OpenAI;
+using MyRecipeBook.Domain.Services.ServiceBus;
 using MyRecipeBook.Domain.Services.Storage;
 using MyRecipeBook.Domain.ValueObjects;
 using MyRecipeBook.Infrastucture.DataAccess;
@@ -21,6 +22,7 @@ using MyRecipeBook.Infrastucture.Security.Cryptography;
 using MyRecipeBook.Infrastucture.Security.Tokens.Access.Generator;
 using MyRecipeBook.Infrastucture.Security.Tokens.Access.Validator;
 using MyRecipeBook.Infrastucture.Services.LoggedUser;
+using MyRecipeBook.Infrastucture.Services.ServiceBus;
 using MyRecipeBook.Infrastucture.Services.Storage;
 using OpenAI.Chat;
 using System.Reflection;
@@ -36,6 +38,7 @@ public static class DependencyInjectionExtension
         AddTokens(services, configuration);
         AddOpenAI(services, configuration);
         AddAzureStorage(services, configuration);
+        AddQueue(services, configuration);
 
         if (configuration.IsUnitTestEnviroment())
             return;
@@ -61,9 +64,12 @@ public static class DependencyInjectionExtension
         services.AddScoped<IUserWriteOnlyRepository, UserRepository>();
         services.AddScoped<IUserReadOnlyRepository, UserRepository>();
         services.AddScoped<IUserUpdateOnlyRepository, UserRepository>();
+        services.AddScoped<IUserDeleteOnlyRepository, UserRepository>();
+
         services.AddScoped<IRecipeWriteOnlyRepository, RecipeRepository>();
         services.AddScoped<IRecipeReadOnlyRepository, RecipeRepository>();
         services.AddScoped<IRecipeUpdateOnlyRepository, RecipeRepository>();
+
     }
 
     private static void AddFluenMigration_SqlServer(IServiceCollection services, IConfiguration configuration)
@@ -107,9 +113,30 @@ public static class DependencyInjectionExtension
 
     private static void AddAzureStorage(IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetValue<string>("Settings:Settings:BlobStorage:Azure");
+        var connectionString = configuration.GetValue<string>("Settings:BlobStorage:Azure");
 
         if(connectionString.NotEmpty())
             services.AddScoped<IBlobStorageService>(c => new AzureStorageService(new BlobServiceClient(connectionString)));
+    }
+
+    private static void AddQueue(IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetValue<string>("Settings:ServiceBus:DeleteUserAccount");
+
+        var client = new ServiceBusClient(connectionString, new ServiceBusClientOptions
+        {
+            TransportType = ServiceBusTransportType.AmqpWebSockets
+        }); 
+
+        var deleteQueue = new DeleteUserQueue(client.CreateSender("user"));
+
+        var deleteUserProcessor = new DeleteUserProcessor(client.CreateProcessor("user", new ServiceBusProcessorOptions
+        {
+            MaxConcurrentCalls = 1
+        }));
+
+        services.AddSingleton(deleteUserProcessor);
+
+        services.AddScoped<IDeleteUserQueue>(options => deleteQueue);
     }
 }
