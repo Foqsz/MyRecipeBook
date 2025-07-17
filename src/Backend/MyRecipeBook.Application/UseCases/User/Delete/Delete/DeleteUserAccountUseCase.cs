@@ -1,33 +1,30 @@
-﻿
-using AutoMapper;
-using MyRecipeBook.Domain.Repositories.UnitOfWork;
+﻿using MyRecipeBook.Domain.Repositories.UnitOfWork;
 using MyRecipeBook.Domain.Repositories.User;
-using MyRecipeBook.Domain.Services.LoggedUser;
+using MyRecipeBook.Domain.Services.Storage;
 
 namespace MyRecipeBook.Application.UseCases.User.Delete.Delete;
 public class DeleteUserAccountUseCase : IDeleteUserAccountUseCase
-{
-    private readonly ILoggedUser _loggedUser;
-    private readonly IMapper _mapper;
-    private readonly IUserUpdateOnlyRepository _userRepository;
+{  
+    private readonly IUserDeleteOnlyRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IBlobStorageService _blobStorageService;
 
-    public DeleteUserAccountUseCase(
-        ILoggedUser loggedUser, 
-        IMapper mapper, 
-        IUserUpdateOnlyRepository userRepository, 
-        IUnitOfWork unitOfWork)
-    {
-        _loggedUser = loggedUser;
-        _mapper = mapper;
+    public DeleteUserAccountUseCase( 
+        IUserDeleteOnlyRepository userRepository,
+        IUnitOfWork unitOfWork,
+        IBlobStorageService blobStorageService)
+    { 
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
+        _blobStorageService = blobStorageService;
     }
 
-    public Task Execute(Guid userIdentifier)
+    public async Task Execute(Guid userIdentifier)
     {
-        var loggedUser = _loggedUser.User();
+        await _blobStorageService.DeleteContainer(userIdentifier);
 
+        await _userRepository.DeleteAccount(userIdentifier);
 
+        await _unitOfWork.Commit();
     }
 }
