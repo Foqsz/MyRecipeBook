@@ -123,6 +123,9 @@ public static class DependencyInjectionExtension
     {
         var connectionString = configuration.GetValue<string>("Settings:ServiceBus:DeleteUserAccount");
 
+        if (string.IsNullOrWhiteSpace(connectionString))
+            return;
+
         var client = new ServiceBusClient(connectionString, new ServiceBusClientOptions
         {
             TransportType = ServiceBusTransportType.AmqpWebSockets
