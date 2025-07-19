@@ -38,6 +38,14 @@ public class UserRepository : IUserWriteOnlyRepository, IUserReadOnlyRepository,
             .FirstAsync(user => user.Id == id);
     }
 
+    public async Task<User?> GetByEmail(string email)
+    {
+        return await _dbContext
+            .Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(user => user.Active && user.Email.Equals(email));
+    } 
+
     //void por que não existe update async
     public void Update(User user) => _dbContext.Users.Update(user);
 
