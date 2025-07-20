@@ -66,9 +66,8 @@ if (builder.Configuration.IsUnitTestEnviroment().IsFalse())
 {
     builder.Services.AddHostedService<DeleteUserService>();
 
+    AddGoogleAuthentication();
 }
-
-AddGoogleAuthentication();
 
 var app = builder.Build();
 
