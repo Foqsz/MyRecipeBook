@@ -34,4 +34,9 @@ public class Sha512Encripter : IPasswordEncripter
         }
         return sb.ToString();
     }
+
+    public bool IsValid(string password, string passwordHash)
+    {
+        throw new NotImplementedException();
+    }
 }
