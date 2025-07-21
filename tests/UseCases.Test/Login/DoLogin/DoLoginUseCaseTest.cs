@@ -7,7 +7,6 @@ using MyRecipeBook.Application.UseCases.Login.DoLogin;
 using MyRecipeBook.Communication.Request;
 using MyRecipeBook.Exceptions;
 using MyRecipeBook.Exceptions.ExceptionsBase;
-using MyRecipeBook.Infrastucture.Security.Tokens.Access.Generator;
 using Shouldly;
 
 namespace UseCases.Test.Login.DoLogin;
@@ -53,7 +52,7 @@ public class DoLoginUseCaseTest
         var accessTokenGenerator = JwtTokenGeneratorBuild.Build();
 
         if (user is not null)
-            userReadOnlyRepositoryBuilder.GetByEmailAndPasswordTest(user);
+            userReadOnlyRepositoryBuilder.GetByEmail(user);
 
         return new DoLoginUseCase(userReadOnlyRepositoryBuilder.Build(), passwordEncripter, accessTokenGenerator);
     }
