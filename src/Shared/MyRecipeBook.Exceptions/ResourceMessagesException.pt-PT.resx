@@ -147,6 +147,9 @@
   <data name="EMAIL_OR_PASSWORD_INVALID" xml:space="preserve">
     <value>E-mail e/ou palavra-passe inválidos.</value>
   </data>
+  <data name="EXPIRED_SESSION" xml:space="preserve">
+    <value>A sua sessão expirou. Por favor, inicie sessão novamente para continuar.</value>
+  </data>
   <data name="GENERATE_ONE_RECIPE_PER_DAY" xml:space="preserve">
     <value>Só é possível gerar uma receita por dia.</value>
   </data>
@@ -164,6 +167,9 @@
   </data>
   <data name="INVALID_NUMBER_INGREDIENTS" xml:space="preserve">
     <value>Número inválido de ingredientes.</value>
+  </data>
+  <data name="INVALID_SESSION" xml:space="preserve">
+    <value>Sessão inválida. Por favor, inicie sessão novamente para continuar.</value>
   </data>
   <data name="NAME_EMPTY" xml:space="preserve">
     <value>O nome não pode estar vazio.</value>
@@ -191,6 +197,9 @@
   </data>
   <data name="RECIPE_TITLE_EMPTY" xml:space="preserve">
     <value>O título da receita não pode estar vazio.</value>
+  </data>
+  <data name="REFRESH_TOKEN_EXPIRATION" xml:space="preserve">
+    <value>O token de atualização expirou. Por favor, inicie sessão novamente para continuar.</value>
   </data>
   <data name="TWO_OR_MORE_INSTRUCTIONS_SAME_ORDER" xml:space="preserve">
     <value>Duas ou mais instruções têm a mesma ordem. Cada instrução deve ter uma ordem única.</value>
