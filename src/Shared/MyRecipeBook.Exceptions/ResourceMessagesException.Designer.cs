@@ -151,6 +151,15 @@ namespace MyRecipeBook.Exceptions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your session has expired. Please log in again to continue..
+        /// </summary>
+        public static string EXPIRED_SESSION {
+            get {
+                return ResourceManager.GetString("EXPIRED_SESSION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can only generate one recipe per day..
         /// </summary>
         public static string GENERATE_ONE_RECIPE_PER_DAY {
@@ -201,6 +210,15 @@ namespace MyRecipeBook.Exceptions {
         public static string INVALID_NUMBER_INGREDIENTS {
             get {
                 return ResourceManager.GetString("INVALID_NUMBER_INGREDIENTS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid session. Please log in again to continue..
+        /// </summary>
+        public static string INVALID_SESSION {
+            get {
+                return ResourceManager.GetString("INVALID_SESSION", resourceCulture);
             }
         }
         
@@ -282,6 +300,15 @@ namespace MyRecipeBook.Exceptions {
         public static string RECIPE_TITLE_EMPTY {
             get {
                 return ResourceManager.GetString("RECIPE_TITLE_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The refresh token has expired. Please log in again to continue..
+        /// </summary>
+        public static string REFRESH_TOKEN_EXPIRATION {
+            get {
+                return ResourceManager.GetString("REFRESH_TOKEN_EXPIRATION", resourceCulture);
             }
         }
         
