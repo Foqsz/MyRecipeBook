@@ -6,10 +6,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyRecipeBook.Domain.Extensions;
 using MyRecipeBook.Domain.Repositories.Recipe;
+using MyRecipeBook.Domain.Repositories.Token.RefreshToken;
 using MyRecipeBook.Domain.Repositories.UnitOfWork;
 using MyRecipeBook.Domain.Repositories.User;
 using MyRecipeBook.Domain.Security.Cryptography;
 using MyRecipeBook.Domain.Security.Tokens;
+using MyRecipeBook.Domain.Security.Tokens.RefreshToken;
 using MyRecipeBook.Domain.Services.LoggedUser;
 using MyRecipeBook.Domain.Services.OpenAI;
 using MyRecipeBook.Domain.Services.ServiceBus;
@@ -21,6 +23,7 @@ using MyRecipeBook.Infrastucture.Extensions;
 using MyRecipeBook.Infrastucture.Security.Cryptography;
 using MyRecipeBook.Infrastucture.Security.Tokens.Access.Generator;
 using MyRecipeBook.Infrastucture.Security.Tokens.Access.Validator;
+using MyRecipeBook.Infrastucture.Security.Tokens.Refresh;
 using MyRecipeBook.Infrastucture.Services.LoggedUser;
 using MyRecipeBook.Infrastucture.Services.ServiceBus;
 using MyRecipeBook.Infrastucture.Services.Storage;
@@ -70,6 +73,7 @@ public static class DependencyInjectionExtension
         services.AddScoped<IRecipeReadOnlyRepository, RecipeRepository>();
         services.AddScoped<IRecipeUpdateOnlyRepository, RecipeRepository>();
 
+        services.AddScoped<ITokenRepository, TokenRepository>();
     }
 
     private static void AddFluenMigration_SqlServer(IServiceCollection services, IConfiguration configuration)
@@ -91,6 +95,8 @@ public static class DependencyInjectionExtension
 
         services.AddScoped<IAccessTokenGenerator>(option => new JwtTokenGenerator(expirationTimeMinutes, signingKey!));
         services.AddScoped<IAccessTokenValidator>(option => new JwtTokenValidator(signingKey!));
+
+        services.AddScoped<IRefreshTokenGenerator, RefreshTokenGenerator>();
     }
 
     private static void AddLoggedUser(IServiceCollection services) => services.AddScoped<ILoggedUser, LoggedUser>();
