@@ -1,7 +1,5 @@
-﻿using Azure.Core;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Security.Cryptography;
 
 namespace WebApi.Test;
 public class MyRecipeBookClassFixture : IClassFixture<CustomWebApplicationFactory>
