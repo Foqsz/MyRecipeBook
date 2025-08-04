@@ -1,0 +1,43 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '98c2f17f-20de-4863-abca-91fc0e1ffc28'
+  imageRepository: 'apimyrecipebook'
+  containerRegistry: 'myrecipebookapii.azurecr.io'
+  dockerfilePath: 'Dockerfile'
+  tag: '$(Build.BuildId)'
+  
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+- task: DownloadSecureFile@1
+  displayName: Download appsettings.json
+  name: appsettings
+  inputs:
+    secureFile: 'appsettings.Production.json'
+
+- script: |
+    cp $(appsettings.secureFilePath) src/Backend/MyRecipeBook.API   
+
+- task: Docker@2
+  displayName: Build and push an image to container registry
+  inputs:
+    command: buildAndPush
+    repository: $(imageRepository)
+    dockerfile: $(dockerfilePath)
+    containerRegistry: $(dockerRegistryServiceConnection)
+    tags: |
+      latest
+      $(tag)
+
+
+
+    

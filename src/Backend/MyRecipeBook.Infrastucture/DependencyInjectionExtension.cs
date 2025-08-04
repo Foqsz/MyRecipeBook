@@ -1,22 +1,58 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Messaging.ServiceBus;
+using Azure.Storage.Blobs;
+using FluentMigrator.Runner;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MyRecipeBook.Domain.Repositories;
+using MyRecipeBook.Domain.Extensions;
+using MyRecipeBook.Domain.Repositories.Recipe;
+using MyRecipeBook.Domain.Repositories.Token.RefreshToken;
+using MyRecipeBook.Domain.Repositories.UnitOfWork;
 using MyRecipeBook.Domain.Repositories.User;
+using MyRecipeBook.Domain.Security.Cryptography;
+using MyRecipeBook.Domain.Security.Tokens;
+using MyRecipeBook.Domain.Security.Tokens.RefreshToken;
+using MyRecipeBook.Domain.Services.LoggedUser;
+using MyRecipeBook.Domain.Services.OpenAI;
+using MyRecipeBook.Domain.Services.ServiceBus;
+using MyRecipeBook.Domain.Services.Storage;
+using MyRecipeBook.Domain.ValueObjects;
 using MyRecipeBook.Infrastucture.DataAccess;
 using MyRecipeBook.Infrastucture.DataAccess.Repositories;
+using MyRecipeBook.Infrastucture.Extensions;
+using MyRecipeBook.Infrastucture.Security.Cryptography;
+using MyRecipeBook.Infrastucture.Security.Tokens.Access.Generator;
+using MyRecipeBook.Infrastucture.Security.Tokens.Access.Validator;
+using MyRecipeBook.Infrastucture.Security.Tokens.Refresh;
+using MyRecipeBook.Infrastucture.Services.LoggedUser;
+using MyRecipeBook.Infrastucture.Services.ServiceBus;
+using MyRecipeBook.Infrastucture.Services.Storage;
+using OpenAI.Chat;
+using System.Reflection;
 
 namespace MyRecipeBook.Infrastucture;
 public static class DependencyInjectionExtension
 {
-    public static void AddInfrastructure(this IServiceCollection services)
+    public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        AddPasswordEncrpter(services);
         AddRepositories(services);
-        AddDbContext_SqlServer(services);
+        AddLoggedUser(services);
+        AddTokens(services, configuration);
+        AddOpenAI(services, configuration);
+        AddAzureStorage(services, configuration);
+        AddQueue(services, configuration);
+
+        if (configuration.IsUnitTestEnviroment())
+            return;
+
+        AddDbContext_SqlServer(services, configuration); 
+        AddFluenMigration_SqlServer(services, configuration);
     }
 
-    private static void AddDbContext_SqlServer(IServiceCollection services)
+    private static void AddDbContext_SqlServer(IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = "Data Source=PC-VP;Initial Catalog=meulivrodereceitas;User ID=sa;Password=1967;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True;";
+        var connectionString = configuration.ConnectionString();
 
         services.AddDbContext<MyRecipeBookDbContext>(dbContextOptions =>
         {
@@ -30,5 +66,84 @@ public static class DependencyInjectionExtension
 
         services.AddScoped<IUserWriteOnlyRepository, UserRepository>();
         services.AddScoped<IUserReadOnlyRepository, UserRepository>();
+        services.AddScoped<IUserUpdateOnlyRepository, UserRepository>();
+        services.AddScoped<IUserDeleteOnlyRepository, UserRepository>();
+
+        services.AddScoped<IRecipeWriteOnlyRepository, RecipeRepository>();
+        services.AddScoped<IRecipeReadOnlyRepository, RecipeRepository>();
+        services.AddScoped<IRecipeUpdateOnlyRepository, RecipeRepository>();
+
+        services.AddScoped<ITokenRepository, TokenRepository>();
+    }
+
+    private static void AddFluenMigration_SqlServer(IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.ConnectionString();
+
+        services.AddFluentMigratorCore().ConfigureRunner(options =>
+        {
+            options.AddSqlServer()
+                .WithGlobalConnectionString(connectionString)
+                .ScanIn(Assembly.Load("MyRecipeBook.Infrastucture")).For.All();
+        });
+    }
+
+    private static void AddTokens(IServiceCollection services, IConfiguration configuration)
+    {
+        var expirationTimeMinutes = configuration.GetValue<uint>("Settings:Jwt:ExpirationTimeMinutes");
+        var signingKey = configuration.GetValue<string>("Settings:Jwt:SigningKey");
+
+        services.AddScoped<IAccessTokenGenerator>(option => new JwtTokenGenerator(expirationTimeMinutes, signingKey!));
+        services.AddScoped<IAccessTokenValidator>(option => new JwtTokenValidator(signingKey!));
+
+        services.AddScoped<IRefreshTokenGenerator, RefreshTokenGenerator>();
+    }
+
+    private static void AddLoggedUser(IServiceCollection services) => services.AddScoped<ILoggedUser, LoggedUser>();
+
+    private static void AddPasswordEncrpter(IServiceCollection services)
+    {
+        services.AddScoped<IPasswordEncripter, BCryptNet>();
+    }
+
+    private static void AddOpenAI(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddScoped<IGenerateRecipeAI, ChatGPTService>();
+
+        var apiKey = configuration.GetValue<string>("Settings:OpenAI:ApiKey");
+
+        services.AddScoped(c => new ChatClient(MyRecipeBookRuleConstants.CHAT_MODEL, apiKey));
+    }
+
+    private static void AddAzureStorage(IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetValue<string>("Settings:BlobStorage:Azure");
+
+        if(connectionString.NotEmpty())
+            services.AddScoped<IBlobStorageService>(c => new AzureStorageService(new BlobServiceClient(connectionString)));
+    }
+
+    private static void AddQueue(IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetValue<string>("Settings:ServiceBus:DeleteUserAccount");
+
+        if (string.IsNullOrWhiteSpace(connectionString))
+            return;
+
+        var client = new ServiceBusClient(connectionString, new ServiceBusClientOptions
+        {
+            TransportType = ServiceBusTransportType.AmqpWebSockets
+        }); 
+
+        var deleteQueue = new DeleteUserQueue(client.CreateSender("user"));
+
+        var deleteUserProcessor = new DeleteUserProcessor(client.CreateProcessor("user", new ServiceBusProcessorOptions
+        {
+            MaxConcurrentCalls = 1
+        }));
+
+        services.AddSingleton(deleteUserProcessor);
+
+        services.AddScoped<IDeleteUserQueue>(options => deleteQueue);
     }
 }

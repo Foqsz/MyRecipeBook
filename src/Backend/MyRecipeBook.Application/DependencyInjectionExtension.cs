@@ -1,33 +1,75 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using MyRecipeBook.Application.Services.AutoMapper;
-using MyRecipeBook.Application.Services.Cryptografhy;
+using MyRecipeBook.Application.UseCases.Login.DoLogin;
+using MyRecipeBook.Application.UseCases.Login.External;
+using MyRecipeBook.Application.UseCases.Recipe.Dashboard;
+using MyRecipeBook.Application.UseCases.Recipe.Delete;
+using MyRecipeBook.Application.UseCases.Recipe.Filter;
+using MyRecipeBook.Application.UseCases.Recipe.Generate;
+using MyRecipeBook.Application.UseCases.Recipe.GetById;
+using MyRecipeBook.Application.UseCases.Recipe.Image;
+using MyRecipeBook.Application.UseCases.Recipe.Register;
+using MyRecipeBook.Application.UseCases.Recipe.Update;
+using MyRecipeBook.Application.UseCases.Token.RefreshToken;
+using MyRecipeBook.Application.UseCases.User.ChangePassword;
+using MyRecipeBook.Application.UseCases.User.Delete.Delete;
+using MyRecipeBook.Application.UseCases.User.Delete.Request;
+using MyRecipeBook.Application.UseCases.User.Profile;
 using MyRecipeBook.Application.UseCases.User.Register;
+using MyRecipeBook.Application.UseCases.User.Update;
+using MyRecipeBook.Domain.Services.ServiceBus;
+using Sqids;
 
 namespace MyRecipeBook.Application;
 public static class DependencyInjectionExtension
 {
-    public static void AddAplication(this IServiceCollection services)
+    public static void AddAplication(this IServiceCollection services, IConfiguration configuration)
     {
-        AddPasswordsEncrpter(services);
         AddAutoMapper(services);
+        AddIdEncoder(services, configuration);
         AddUseCases(services);
     }
 
     private static void AddAutoMapper(IServiceCollection services)
-    {  
-        services.AddScoped(option => new AutoMapper.MapperConfiguration(options =>
+    {   
+        services.AddScoped(option => new AutoMapper.MapperConfiguration(autoMapperOptions =>
         {
-            options.AddProfile(new AutoMappingProfile());
+            var sqids = option.GetService<SqidsEncoder<long>>()!;
+
+            autoMapperOptions.AddProfile(new AutoMappingProfile(sqids));
         }).CreateMapper());
+    }
+
+    private static void AddIdEncoder(IServiceCollection services, IConfiguration configuration)
+    {
+        var sqids = new SqidsEncoder<long>(new()
+        {
+            MinLength = 3,
+            Alphabet = configuration.GetValue<string>("Settings:IdCrypographyAlphabet")!
+        });
+
+        services.AddSingleton(sqids);
     }
 
     private static void AddUseCases(IServiceCollection services)
     {
         services.AddScoped<IRegisterUserUseCase, RegisterUserUseCase>();
-    }
-
-    private static void AddPasswordsEncrpter(IServiceCollection services)
-    {
-        services.AddScoped(option => new PasswordEncripter());
+        services.AddScoped<IDoLoginUseCase, DoLoginUseCase>();
+        services.AddScoped<IGetUserProfileUseCase, GetUserProfileUseCase>();
+        services.AddScoped<IUpdateUserUseCase, UpdateUserUseCase>();
+        services.AddScoped<IChangePasswordUseCase, ChangePasswordUseCase>();
+        services.AddScoped<IRegisterRecipeUseCase, RegisterRecipeUseCase>();
+        services.AddScoped<IFilterRecipeUseCase, FilterRecipeUseCase>();
+        services.AddScoped<IGetRecipeByIdUseCase, GetRecipeByIdUseCase>();
+        services.AddScoped<IDeleteRecipeUseCase, DeleteRecipeUseCase>();
+        services.AddScoped<IUpdateRecipeUseCase, UpdateRecipeUseCase>();
+        services.AddScoped<IGetDashboardUseCase, GetDashboardUseCase>();
+        services.AddScoped<IGenerateRecipeUseCase, GenerateRecipeUseCase>();
+        services.AddScoped<IAddUpdateImageCoverUseCase, AddUpdateImageCoverUseCase>();
+        services.AddScoped<IRequestDeleteUserUseCase, RequestDeleteUserUseCase>();
+        services.AddScoped<IDeleteUserAccountUseCase, DeleteUserAccountUseCase>();
+        services.AddScoped<IExternalLoginUseCase, ExternalLoginUseCase>();
+        services.AddScoped<IUseRefreshTokenUseCase, UseRefreshTokenUseCase>();
     }
 }

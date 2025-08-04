@@ -1,6 +1,11 @@
-﻿namespace MyRecipeBook.Domain.Repositories.User;
+﻿using MyRecipeBook.Domain.Entities;
+
+namespace MyRecipeBook.Domain.Repositories.User;
 public interface IUserReadOnlyRepository
 {
-    public Task<bool> ExistActiveUserWithEmail(string email);
+    Task<bool> ExistActiveUserWithEmail(string email);
+    Task<bool> ExistActiveUserWithIdentifier(Guid userIdentifier);
+    //Task<Entities.User?> GetByEmailAndPassword(string email, string password);
+    Task<Entities.User?> GetByEmail(string email);
 }
 
